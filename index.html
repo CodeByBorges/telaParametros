@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Bombeamento Avançado</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Sistema de Bombeamento Avançado</h1>
+        <nav class="tabs">
+            <button class="tab-btn active" data-tab="parametros-basicos">Parâmetros Básicos</button>
+            <button class="tab-btn" data-tab="propriedades-fluido">Propriedades do Fluido</button>
+            <button class="tab-btn" data-tab="troca-termica">Troca Térmica</button>
+        </nav>
+
+        <div class="tab-content active" id="parametros-basicos">
+            <div class="dashboard">
+                <div class="card">
+                    <div class="card__content">
+                        <i class="fas fa-arrows-alt-v"></i>
+                        <h3>Altura Geométrica</h3>
+                        <input type="number" id="alturaGeometrica" placeholder="metros" step="0.1" min="0">
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card__content">
+                        <i class="fas fa-arrow-up"></i>
+                        <h3>Altura de Sucção</h3>
+                        <input type="number" id="alturaSuccao" placeholder="metros" step="0.1" min="0">
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card__content">
+                        <i class="fas fa-thermometer-half"></i>
+                        <h3>Temperatura Média do Fluído</h3>
+                        <input type="number" id="temperaturaFluido" placeholder="°C" step="0.1">
+                        <select id="unidadeTemperatura">
+                            <option value="C">°C</option>
+                            <option value="F">°F</option>
+                            <option value="K">K</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card__content">
+                        <i class="fas fa-flask"></i>
+                        <h3>Densidade do Fluído</h3>
+                        <input type="number" id="densidadeFluido" placeholder="kg/m³" step="0.1" min="0">
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card__content">
+                        <i class="fas fa-tint"></i>
+                        <h3>Pressão do Fluído na Captação</h3>
+                        <input type="number" id="pressaoFluido" placeholder="Pa" step="0.1" min="0">
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card__content">
+                        <i class="fas fa-compress-arrows-alt"></i>
+                        <h3>Perda de Carga na Sucção</h3>
+                        <input type="number" id="perdaCargaSuccao" placeholder="m" step="0.1" min="0">
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card__content">
+                        <i class="fas fa-cogs"></i>
+                        <h3>Perda de Carga na Bomba</h3>
+                        <input type="number" id="perdaCargaBomba" placeholder="m" step="0.1" min="0">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-content" id="propriedades-fluido">
+            <div class="dashboard">
+                <div class="card">
+                    <div class="card__content">
+                        <i class="fas fa-flask"></i>
+                        <h3>Densidade do Fluido</h3>
+                        <select id="densidade">
+                            <option value="1000">Água (1000 kg/m³)</option>
+                            <option value="1.225">Ar (1.225 kg/m³)</option>
+                            <option value="920">Óleo (920 kg/m³)</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card__content">
+                        <i class="fas fa-info-circle"></i>
+                        <h3>Característica do Fluido</h3>
+                        <input type="text" id="caracteristicaFluido">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-content" id="troca-termica">
+            <div class="dashboard">
+                <div class="card">
+                    <div class="card__content">
+                        <i class="fas fa-thermometer-half"></i>
+                        <h3>Temperatura do Fluido 1</h3>
+                        <input type="number" id="temperaturaFluido1" placeholder="°C">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="visualization">
+            <svg id="pumpSystem" viewBox="0 0 800 400" preserveAspectRatio="xMidYMid meet">
+                <!-- Reservoir -->
+                <rect id="reservoir" x="50" y="300" width="200" height="100" fill="#3acfd5" />
+                
+                <!-- Suction pipe -->
+                <line id="suctionPipe" x1="150" y1="300" x2="150" y2="200" stroke="#3a4ed5" stroke-width="20" />
+                
+                <!-- Pump -->
+                <circle id="pump" cx="150" cy="180" r="30" fill="#3a4ed5" />
+                
+                <!-- Discharge pipe -->
+                <path id="dischargePipe" d="M180 180 Q400 180 400 50 L700 50" fill="none" stroke="#3a4ed5" stroke-width="20" />
+                
+                <!-- Flow indicators -->
+                <g id="flowIndicators"></g>
+                
+                <!-- Water level in reservoir -->
+                <rect id="waterLevel" x="50" y="350" width="200" height="50" fill="#3acfd5" />
+                
+                <!-- Text elements -->
+                <text id="altitudeText" x="750" y="30" fill="#ffffff" font-size="14" text-anchor="end">Altura Geométrica: 0m</text>
+                <text id="flowRateText" x="750" y="60" fill="#ffffff" font-size="14" text-anchor="end">Temperatura: 0°C</text>
+                <text id="headText" x="750" y="90" fill="#ffffff" font-size="14" text-anchor="end">Densidade: 0kg/m³</text>
+            </svg>
+        </div>
+
+        <button id="calcular" class="calcular-btn">Calcular</button>
+        <div id="resultado" class="resultado"></div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
